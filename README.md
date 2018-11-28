@@ -1,5 +1,5 @@
 # ts-transform-import-path-rewrite
----
+
 This is a TypeScript AST Transformer that allows you to rewrite import path in output JS & `d.ts` files accordingly. The primary use case for this is to mitigate different build system import structure, such as relative vs absolute `import` and aliasing output `import` paths.
 
 ## Usage
