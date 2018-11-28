@@ -1,0 +1,49 @@
+{
+  "name": "ts-transform-import-path-rewrite",
+  "version": "0.1.0",
+  "description": "TS AST transformer to rewrite import path",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "rm -rf test/fixture/*.js && tsc && mocha --require ts-node/register test/*.test.ts",
+    "prettier": "prettier --print-width=120 --tab-width=4 --single-quote --trailing-comma=es5 --no-semi --parser=typescript --write 'src/**/*.ts*' || true",
+    "prepublishOnly": "tsc",
+    "semantic-release": "semantic-release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dropbox/ts-transform-import-path-rewrite.git"
+  },
+  "keywords": [
+    "typescript",
+    "ast",
+    "compiler",
+    "import",
+    "es6",
+    "path",
+    "rewrite",
+    "transformer"
+  ],
+  "author": "Long Ho <holevietlong@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/dropbox/ts-transform-import-path-rewrite/issues"
+  },
+  "homepage": "https://github.com/dropbox/ts-transform-import-path-rewrite#readme",
+  "dependencies": {
+    "typescript": "^3.1.6"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/fs-extra": "^5.0.4",
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.10",
+    "chai": "^4.2.0",
+    "fs-extra": "^7.0.1",
+    "glob": "^7.1.3",
+    "mocha": "^5.2.0",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.15.2",
+    "ts-node": "^7.0.1"
+  }
+}
