@@ -23,7 +23,7 @@
     "rewrite",
     "transformer"
   ],
-  "author": "Long Ho <holevietlong@gmail.com>",
+  "author": "Long Ho <longho@dropbox.com>",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/dropbox/ts-transform-import-path-rewrite/issues"
