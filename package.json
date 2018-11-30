@@ -1,6 +1,6 @@
 {
   "name": "ts-transform-import-path-rewrite",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TS AST transformer to rewrite import path",
   "main": "dist/index.js",
   "scripts": {
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/dropbox/ts-transform-import-path-rewrite#readme",
   "dependencies": {
-    "typescript": "^3.1.6"
+    "typescript": "3"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",

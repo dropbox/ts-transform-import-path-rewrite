@@ -54,8 +54,8 @@ function visitor(ctx: ts.TransformationContext, sf: ts.SourceFile, opts: Opts = 
     return visitor
 }
 
-export function transformDts(opts: Opts) {
-    return (ctx: ts.TransformationContext): ts.Transformer<ts.SourceFile | ts.Bundle> => {
+export function transformDts(opts: Opts): ts.TransformerFactory<ts.SourceFile> {
+    return (ctx: ts.TransformationContext): ts.Transformer<ts.SourceFile> => {
         return (sf: ts.SourceFile) => ts.visitNode(sf, visitor(ctx, sf, opts))
     }
 }
@@ -96,7 +96,7 @@ function amdVisitor(ctx: ts.TransformationContext, sf: ts.SourceFile, opts: Opts
     return visitor
 }
 
-export function transformAmd(opts: Opts) {
+export function transformAmd(opts: Opts): ts.TransformerFactory<ts.SourceFile> {
     return (ctx: ts.TransformationContext): ts.Transformer<ts.SourceFile> => {
         return (sf: ts.SourceFile) => ts.visitNode(sf, amdVisitor(ctx, sf, opts))
     }
