@@ -32,18 +32,26 @@ function rewritePath(importPath: string, sf: ts.SourceFile, opts: Opts) {
     }
 }
 
-function visitor(ctx: ts.TransformationContext, sf: ts.SourceFile, opts: Opts = { projectBaseDir: '' }) {
+function importExportVisitor(ctx: ts.TransformationContext, sf: ts.SourceFile, opts: Opts = { projectBaseDir: '' }) {
     const visitor: ts.Visitor = (node: ts.Node): ts.Node => {
-        if (node.kind === ts.SyntaxKind.ImportDeclaration && (node as ts.ImportDeclaration).moduleSpecifier) {
-            const importPathWithQuotes = (node as ts.ImportDeclaration).moduleSpecifier.getText(sf)
+        if ((ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) && node.moduleSpecifier) {
+            const importPathWithQuotes = node.moduleSpecifier.getText(sf)
             const importPath = importPathWithQuotes.substr(1, importPathWithQuotes.length - 2)
             const rewrittenPath = rewritePath(importPath, sf, opts)
             // Only rewrite relative path
             if (rewrittenPath) {
-                return ts.createImportDeclaration(
-                    undefined,
-                    undefined,
-                    (node as ts.ImportDeclaration).importClause,
+                if (ts.isImportDeclaration(node)) {
+                    return ts.createImportDeclaration(
+                        node.decorators,
+                        node.modifiers,
+                        node.importClause,
+                        ts.createLiteral(rewrittenPath)
+                    )
+                }
+                return ts.createExportDeclaration(
+                    node.decorators, 
+                    node.modifiers, 
+                    node.exportClause, 
                     ts.createLiteral(rewrittenPath)
                 )
             }
@@ -56,7 +64,7 @@ function visitor(ctx: ts.TransformationContext, sf: ts.SourceFile, opts: Opts = 
 
 export function transformDts(opts: Opts): ts.TransformerFactory<ts.SourceFile> {
     return (ctx: ts.TransformationContext): ts.Transformer<ts.SourceFile> => {
-        return (sf: ts.SourceFile) => ts.visitNode(sf, visitor(ctx, sf, opts))
+        return (sf: ts.SourceFile) => ts.visitNode(sf, importExportVisitor(ctx, sf, opts))
     }
 }
 

@@ -19,23 +19,33 @@ describe("import path rewrite should work", function() {
   beforeEach(function() {
     compile(resolve(__dirname, "fixture/foo.ts"), opts);
   });
-  it("in js output", function(done) {
-    readFile(resolve(__dirname, "fixture/foo.js"), "utf8").then(content => {
+  it("in js output", function() {
+    return readFile(resolve(__dirname, "fixture/foo.js"), "utf8").then(content => {
       expect(content).to.contain(
         'import { dummy } from "dummy-project/test/fixture/bar";'
       );
       expect(content).to.contain(
         'import * as fsExtra from "rewritten/fs-extra";'
       );
-      done();
+      expect(content).to.contain(
+        'export { dummy2 } from "dummy-project/test/fixture/bar";'
+      );
+      expect(content).to.contain(
+        'export * from "dummy-project/test/fixture/bar";'
+      );
     });
   });
-  it("in d.ts output", function(done) {
-    readFile(resolve(__dirname, "fixture/foo.d.ts"), "utf8").then(content => {
+  it("in d.ts output", function() {
+    return readFile(resolve(__dirname, "fixture/foo.d.ts"), "utf8").then(content => {
       expect(content).to.contain(
         'import * as fsExtra from "rewritten/fs-extra";'
       );
-      done();
+      expect(content).to.contain(
+        'export { dummy2 } from "dummy-project/test/fixture/bar";'
+      );
+      expect(content).to.contain(
+        'export * from "dummy-project/test/fixture/bar";'
+      );
     });
   });
 });

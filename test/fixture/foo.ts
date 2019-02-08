@@ -5,3 +5,5 @@ export function dummyFs(fn: string) {
 }
 export const dummy1 = dummy + 1;
 export const readFile = fsExtra.readFile;
+export {dummy2} from './bar'
+export * from './bar'
