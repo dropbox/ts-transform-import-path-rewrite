@@ -40,7 +40,12 @@ function rewritePath(importPath: string, sf: ts.SourceFile, opts: Opts, regexps:
     return importPath
 }
 
-function importExportVisitor(ctx: ts.TransformationContext, sf: ts.SourceFile, opts: Opts = { projectBaseDir: '' }, regexps: Record<string, RegExp>) {
+function importExportVisitor(
+    ctx: ts.TransformationContext,
+    sf: ts.SourceFile,
+    opts: Opts = { projectBaseDir: '' },
+    regexps: Record<string, RegExp>
+) {
     const visitor: ts.Visitor = (node: ts.Node): ts.Node => {
         if ((ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) && node.moduleSpecifier) {
             const importPathWithQuotes = node.moduleSpecifier.getText(sf)
@@ -57,9 +62,9 @@ function importExportVisitor(ctx: ts.TransformationContext, sf: ts.SourceFile, o
                     )
                 }
                 return ts.createExportDeclaration(
-                    node.decorators, 
-                    node.modifiers, 
-                    node.exportClause, 
+                    node.decorators,
+                    node.modifiers,
+                    node.exportClause,
                     ts.createLiteral(rewrittenPath)
                 )
             }
@@ -71,11 +76,14 @@ function importExportVisitor(ctx: ts.TransformationContext, sf: ts.SourceFile, o
 }
 
 export function transformDts(opts: Opts): ts.TransformerFactory<ts.SourceFile> {
-    const {alias = {}} = opts
-    const regexps: Record<string, RegExp> = Object.keys(alias).reduce((all, regexString) => {
-        all[regexString] = new RegExp(regexString, 'gi')
-        return all
-    }, {} as Record<string, RegExp>)
+    const { alias = {} } = opts
+    const regexps: Record<string, RegExp> = Object.keys(alias).reduce(
+        (all, regexString) => {
+            all[regexString] = new RegExp(regexString, 'gi')
+            return all
+        },
+        {} as Record<string, RegExp>
+    )
     return (ctx: ts.TransformationContext): ts.Transformer<ts.SourceFile> => {
         return (sf: ts.SourceFile) => ts.visitNode(sf, importExportVisitor(ctx, sf, opts, regexps))
     }
@@ -97,7 +105,12 @@ function isDefineNode(node: ts.Node) {
     )
 }
 
-function amdVisitor(ctx: ts.TransformationContext, sf: ts.SourceFile, opts: Opts = { projectBaseDir: '' }, regexps: Record<string, RegExp>) {
+function amdVisitor(
+    ctx: ts.TransformationContext,
+    sf: ts.SourceFile,
+    opts: Opts = { projectBaseDir: '' },
+    regexps: Record<string, RegExp>
+) {
     const visitor: ts.Visitor = (node: ts.Node): ts.Node => {
         if (isDefineNode(node)) {
             const importPathsWithQuotes = ((node as ts.CallExpression).arguments[0] as ts.ArrayLiteralExpression)
@@ -118,11 +131,14 @@ function amdVisitor(ctx: ts.TransformationContext, sf: ts.SourceFile, opts: Opts
 }
 
 export function transformAmd(opts: Opts): ts.TransformerFactory<ts.SourceFile> {
-    const {alias = {}} = opts
-    const regexps: Record<string, RegExp> = Object.keys(alias).reduce((all, regexString) => {
-        all[regexString] = new RegExp(regexString, 'gi')
-        return all
-    }, {} as Record<string, RegExp>)
+    const { alias = {} } = opts
+    const regexps: Record<string, RegExp> = Object.keys(alias).reduce(
+        (all, regexString) => {
+            all[regexString] = new RegExp(regexString, 'gi')
+            return all
+        },
+        {} as Record<string, RegExp>
+    )
     return (ctx: ts.TransformationContext): ts.Transformer<ts.SourceFile> => {
         return (sf: ts.SourceFile) => ts.visitNode(sf, amdVisitor(ctx, sf, opts, regexps))
     }
