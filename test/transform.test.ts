@@ -11,6 +11,9 @@ const opts: PathTransformOpts = {
     if (importPath.startsWith("fs-extra")) {
       return "rewritten/fs-extra";
     }
+  },
+  alias: {
+    '^(glob)$': 'external/$1'
   }
 };
 
@@ -21,18 +24,22 @@ describe("import path rewrite should work", function() {
   });
   it("in js output", function() {
     return readFile(resolve(__dirname, "fixture/foo.js"), "utf8").then(content => {
-      expect(content).to.contain(
-        'import { dummy } from "dummy-project/test/fixture/bar";'
-      );
-      expect(content).to.contain(
-        'import * as fsExtra from "rewritten/fs-extra";'
-      );
-      expect(content).to.contain(
-        'export { dummy2 } from "dummy-project/test/fixture/bar";'
-      );
-      expect(content).to.contain(
-        'export * from "dummy-project/test/fixture/bar";'
-      );
+      expect(content).to.equal(
+`import { dummy } from "dummy-project/test/fixture/bar";
+import * as fsExtra from "rewritten/fs-extra";
+import { sync } from "external/glob";
+import { hasMagic } from "external/glob";
+export function dummyFs(fn) {
+    fsExtra.readFileSync(fn);
+}
+export const dummy1 = dummy + 1;
+export const readFile = fsExtra.readFile;
+export const globSync = sync;
+export const hasMagic1 = hasMagic;
+export { dummy2 } from "dummy-project/test/fixture/bar";
+export * from "dummy-project/test/fixture/bar";
+`
+      )
     });
   });
   it("in d.ts output", function() {

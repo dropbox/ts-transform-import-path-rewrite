@@ -23,6 +23,14 @@ import foo from 'my-project-name/foo'
 ### `rewrite?(importPath: string, sourceFilePath: string): string`
 Custom rewrite function to rewrite any `import` path we encounter to any new `import` path.
 
+### `alias?: Record<string, string>`
+Alias regex map to replace, e.g:
+```
+{
+    '^(foo)$': 'external/$1'
+}
+```
+
 ## License
 
 Copyright (c) 2018 Dropbox, Inc.
