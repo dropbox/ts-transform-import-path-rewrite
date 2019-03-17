@@ -14,7 +14,7 @@ This is the base directory of your project folder. This is primarily used to det
 
 ### `project?: string`
 Project name to rewrite relative `import` to. For example:
-```
+```ts
 import foo from './foo'
 // Becomes
 import foo from 'my-project-name/foo'
@@ -25,9 +25,9 @@ Custom rewrite function to rewrite any `import` path we encounter to any new `im
 
 ### `alias?: Record<string, string>`
 Alias regex map to replace, e.g:
-```
+```json
 {
-    '^(foo)$': 'external/$1'
+    "^(foo)$": "external/$1"
 }
 ```
 
