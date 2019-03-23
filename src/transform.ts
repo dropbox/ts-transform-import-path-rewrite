@@ -40,6 +40,10 @@ function rewritePath(importPath: string, sf: ts.SourceFile, opts: Opts, regexps:
     return importPath
 }
 
+function isDynamicImport (node: ts.Node): node is ts.CallExpression {
+    return ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.ImportKeyword
+}
+
 function importExportVisitor(
     ctx: ts.TransformationContext,
     sf: ts.SourceFile,
@@ -47,26 +51,31 @@ function importExportVisitor(
     regexps: Record<string, RegExp>
 ) {
     const visitor: ts.Visitor = (node: ts.Node): ts.Node => {
+        let importPath: string
         if ((ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) && node.moduleSpecifier) {
             const importPathWithQuotes = node.moduleSpecifier.getText(sf)
-            const importPath = importPathWithQuotes.substr(1, importPathWithQuotes.length - 2)
+            importPath = importPathWithQuotes.substr(1, importPathWithQuotes.length - 2)
+        } else if (isDynamicImport(node)) {
+            const importPathWithQuotes = node.arguments[0].getText(sf)
+            importPath = importPathWithQuotes.substr(1, importPathWithQuotes.length - 2)
+        } else if (ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument) && ts.isStringLiteral(node.argument.literal)) {
+            importPath = node.argument.literal.text // `.text` instead of `getText` bc this node doesn't map to sf (it's generated d.ts)
+        }
+
+        if (importPath) {
             const rewrittenPath = rewritePath(importPath, sf, opts, regexps)
+            const newNode = ts.getMutableClone(node)
             // Only rewrite relative path
             if (rewrittenPath !== importPath) {
-                if (ts.isImportDeclaration(node)) {
-                    return ts.createImportDeclaration(
-                        node.decorators,
-                        node.modifiers,
-                        node.importClause,
-                        ts.createLiteral(rewrittenPath)
-                    )
+                if (ts.isImportDeclaration(newNode) || ts.isExportDeclaration(newNode)) {
+                    newNode.moduleSpecifier = ts.createLiteral(rewrittenPath)
+                } else if (isDynamicImport(newNode)) {
+                    newNode.arguments = ts.createNodeArray([ts.createStringLiteral(rewrittenPath)])
+                } else if (ts.isImportTypeNode(newNode)) {
+                    newNode.argument = ts.createLiteralTypeNode(ts.createStringLiteral(rewrittenPath))
                 }
-                return ts.createExportDeclaration(
-                    node.decorators,
-                    node.modifiers,
-                    node.exportClause,
-                    ts.createLiteral(rewrittenPath)
-                )
+
+                return newNode
             }
         }
         return ts.visitEachChild(node, visitor, ctx)

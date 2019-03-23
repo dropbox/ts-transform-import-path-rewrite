@@ -1,6 +1,6 @@
 {
   "name": "ts-transform-import-path-rewrite",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "TS AST transformer to rewrite import path",
   "main": "dist/index.js",
   "scripts": {

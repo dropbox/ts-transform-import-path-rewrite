@@ -31,6 +31,7 @@ import { sync } from "external/glob";
 import { hasMagic } from "external/glob";
 export function dummyFs(fn) {
     fsExtra.readFileSync(fn);
+    return import("dummy-project/test/fixture/bar");
 }
 export const dummy1 = dummy + 1;
 export const readFile = fsExtra.readFile;

@@ -4,6 +4,7 @@ import {sync} from 'glob'
 import {hasMagic} from 'glob'
 export function dummyFs(fn: string) {
   fsExtra.readFileSync(fn);
+  return import("./bar")
 }
 export const dummy1 = dummy + 1;
 export const readFile = fsExtra.readFile;
