@@ -40,7 +40,7 @@ function rewritePath(importPath: string, sf: ts.SourceFile, opts: Opts, regexps:
     return importPath
 }
 
-function isDynamicImport (node: ts.Node): node is ts.CallExpression {
+function isDynamicImport(node: ts.Node): node is ts.CallExpression {
     return ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.ImportKeyword
 }
 
@@ -58,7 +58,11 @@ function importExportVisitor(
         } else if (isDynamicImport(node)) {
             const importPathWithQuotes = node.arguments[0].getText(sf)
             importPath = importPathWithQuotes.substr(1, importPathWithQuotes.length - 2)
-        } else if (ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument) && ts.isStringLiteral(node.argument.literal)) {
+        } else if (
+            ts.isImportTypeNode(node) &&
+            ts.isLiteralTypeNode(node.argument) &&
+            ts.isStringLiteral(node.argument.literal)
+        ) {
             importPath = node.argument.literal.text // `.text` instead of `getText` bc this node doesn't map to sf (it's generated d.ts)
         }
 
