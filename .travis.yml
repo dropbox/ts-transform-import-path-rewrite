@@ -6,7 +6,6 @@ notifications:
   email: false
 node_js:
   - '10'
-  - '8'
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
