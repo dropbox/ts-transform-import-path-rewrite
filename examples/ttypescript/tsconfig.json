@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "module": "esnext",
+        "declaration": true,
+        "plugins": [
+            { 
+                "transform": "../../", 
+                "import": "transform",
+                "alias": {
+                    "^(fs-extra)$": "external/$1"
+                },
+                "after": true,
+                "afterDeclarations": true, 
+                "type": "config" 
+            },
+        ]
+    }
+}

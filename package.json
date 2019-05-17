@@ -1,6 +1,6 @@
 {
   "name": "ts-transform-import-path-rewrite",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "TS AST transformer to rewrite import path",
   "main": "dist/index.js",
   "scripts": {
@@ -44,6 +44,7 @@
     "mocha": "^5.2.0",
     "pre-commit": "^1.2.2",
     "prettier": "^1.15.2",
-    "ts-node": "^7.0.1"
+    "ts-node": "^7.0.1",
+    "ttypescript": "^1.5.6"
   }
 }
