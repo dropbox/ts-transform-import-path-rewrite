@@ -39,3 +39,5 @@ jspm_packages
 test/fixture/*.js
 test/fixture/*.d.ts
 dist/
+examples/**/*.js
+examples/**/*.d.ts
