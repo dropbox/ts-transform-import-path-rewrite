@@ -5,6 +5,11 @@
 This is a TypeScript AST Transformer that allows you to rewrite import path in output JS & `d.ts` files accordingly. The primary use case for this is to mitigate different build system import structure, such as relative vs absolute `import` and aliasing output `import` paths.
 
 ## Usage
+
+### ttypescript
+Example for ttypescript usage is in `examples/ttypescript`. Run `npx ttsc`.
+
+### Compiler Wrapper
 First of all, you need some level of familiarity with the [TypeScript Compiler API](https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API).
 
 `compile.ts` & tests should have examples of how this works. The available options are:
