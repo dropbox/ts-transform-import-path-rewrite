@@ -1,7 +1,7 @@
 import * as ts from "typescript";
 import { sync as globSync } from "glob";
 import {
-  transformDts as dtsPathTransform,
+  transform as dtsPathTransform,
   Opts as PathTransformOpts
 } from "./src";
 
