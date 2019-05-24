@@ -44,7 +44,7 @@
     "mocha": "^6.1.4",
     "pre-commit": "^1.2.2",
     "prettier": "^1.15.2",
-    "ts-node": "^7.0.1",
+    "ts-node": "^8.1.0",
     "ttypescript": "^1.5.6"
   }
 }
