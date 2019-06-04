@@ -12,3 +12,4 @@ export const globSync = sync
 export const hasMagic1 = hasMagic
 export {dummy2} from './bar'
 export * from './bar'
+export {dummyBar2} from './bar2'

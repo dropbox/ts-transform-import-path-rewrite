@@ -13,6 +13,7 @@ const opts: PathTransformOpts = {
     }
   },
   alias: {
+    '\.\/bar2': 'relative',
     '^(glob)$': 'external/$1'
   }
 };
@@ -39,6 +40,7 @@ export const globSync = sync;
 export const hasMagic1 = hasMagic;
 export { dummy2 } from "dummy-project/test/fixture/bar";
 export * from "dummy-project/test/fixture/bar";
+export { dummyBar2 } from "relative";
 `
       )
     });
@@ -56,4 +58,11 @@ export * from "dummy-project/test/fixture/bar";
       );
     });
   });
+  it('should prioritize alias over relative resolution', function () {
+    return readFile(resolve(__dirname, "fixture/foo.d.ts"), "utf8").then(content => {
+      expect(content).to.contain(
+        'export { dummyBar2 } from "relative";'
+      );
+    });
+  })
 });

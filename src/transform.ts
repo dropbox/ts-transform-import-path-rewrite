@@ -23,18 +23,24 @@ export interface Opts {
  * @returns
  */
 function rewritePath(importPath: string, sf: ts.SourceFile, opts: Opts, regexps: Record<string, RegExp>) {
+    const aliases = Object.keys(regexps)
+    for (const alias of aliases) {
+        const regex = regexps[alias]
+        if (regexps[alias].test(importPath)) {
+            return importPath.replace(regex, opts.alias[alias]) 
+        }
+    }
+
+    if (typeof opts.rewrite === 'function') {
+        const newImportPath = opts.rewrite(importPath, sf.fileName)
+        if (newImportPath) {
+            return newImportPath
+        }
+    }
+
     if (opts.project && opts.projectBaseDir && importPath.startsWith('.')) {
         const path = resolve(dirname(sf.fileName), importPath).split(opts.projectBaseDir)[1]
         return `${opts.project}${path}`
-    }
-
-    Object.keys(regexps).forEach(str => {
-        const regex = regexps[str]
-        importPath = importPath.replace(regex, opts.alias[str])
-    })
-
-    if (typeof opts.rewrite === 'function') {
-        return opts.rewrite(importPath, sf.fileName) || importPath
     }
 
     return importPath
