@@ -74,19 +74,48 @@ function importExportVisitor(
 
         if (importPath) {
             const rewrittenPath = rewritePath(importPath, sf, opts, regexps)
-            const newNode = ts.getMutableClone(node)
+            
             // Only rewrite relative path
             if (rewrittenPath !== importPath) {
-                if (ts.isImportDeclaration(newNode) || ts.isExportDeclaration(newNode)) {
-                    newNode.moduleSpecifier = ts.createLiteral(rewrittenPath)
-                } else if (isDynamicImport(newNode)) {
-                    newNode.arguments = ts.createNodeArray([ts.createStringLiteral(rewrittenPath)])
-                } else if (ts.isImportTypeNode(newNode)) {
-                    newNode.argument = ts.createLiteralTypeNode(ts.createStringLiteral(rewrittenPath))
+                if (ts.isImportDeclaration(node)) {
+                  return ctx.factory.updateImportDeclaration(
+                    node,
+                    node.decorators,
+                    node.modifiers,
+                    node.importClause,
+                    ctx.factory.createStringLiteral(rewrittenPath)
+                  );
+                } else if (ts.isExportDeclaration(node)) {
+                  return ctx.factory.updateExportDeclaration(
+                    node,
+                    node.decorators,
+                    node.modifiers,
+                    node.isTypeOnly,
+                    node.exportClause,
+                    ctx.factory.createStringLiteral(rewrittenPath)
+                  );
+                } else if (isDynamicImport(node)) {
+                  return ctx.factory.updateCallExpression(
+                    node,
+                    node.expression,
+                    node.typeArguments,
+                    ctx.factory.createNodeArray([
+                      ctx.factory.createStringLiteral(rewrittenPath),
+                    ])
+                  );
+                } else if (ts.isImportTypeNode(node)) {
+                  return ctx.factory.updateImportTypeNode(
+                    node,
+                    ts.createLiteralTypeNode(
+                      ts.createStringLiteral(rewrittenPath)
+                    ),
+                    node.qualifier,
+                    node.typeArguments,
+                    node.isTypeOf
+                  );
                 }
-
-                return newNode
             }
+            return node;
         }
         return ts.visitEachChild(node, visitor, ctx)
     }
