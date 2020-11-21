@@ -30,20 +30,20 @@
   },
   "homepage": "https://github.com/dropbox/ts-transform-import-path-rewrite#readme",
   "dependencies": {
-    "typescript": "4"
+    "typescript": "^4.1.2"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",
-    "@types/fs-extra": "^9.0.3",
+    "@types/fs-extra": "^9.0.4",
     "@types/glob": "^7.1.1",
-    "@types/mocha": "^8.0.0",
-    "@types/node": "^14.14.6",
+    "@types/mocha": "^8.0.4",
+    "@types/node": "^14.14.9",
     "chai": "^4.2.0",
     "fs-extra": "^9.0.1",
     "glob": "^7.1.3",
     "mocha": "^8.2.1",
     "pre-commit": "^1.2.2",
-    "prettier": "^2.1.2",
+    "prettier": "^2.2.0",
     "ts-node": "^9.0.0",
     "ttypescript": "^2.5.2"
   }
