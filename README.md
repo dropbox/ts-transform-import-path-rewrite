@@ -1,4 +1,4 @@
-# ts-transform-import-path-rewrite
+# creates a commit and ts-transform-import-path-rewrite
 
 ![build status](https://travis-ci.org/dropbox/ts-transform-import-path-rewrite.svg?branch=master)
 
