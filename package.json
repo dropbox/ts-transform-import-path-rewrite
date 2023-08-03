@@ -43,7 +43,7 @@
     "glob": "^7.1.3",
     "mocha": "^8.2.1",
     "pre-commit": "^1.2.2",
-    "prettier": "^2.2.0",
+    "prettier": "^3.0.1",
     "ts-node": "^9.0.0",
     "ttypescript": "^2.5.2"
   }
